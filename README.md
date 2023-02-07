@@ -1,7 +1,7 @@
 # digitech-assembler
 
 A simple "assembler" (actually outputs hex codes of the instructions in ASCII)
-for the minimal computer.
+for the minimal processor.
 
 It supports R-, I- and J-Instructions.
 
