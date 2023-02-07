@@ -36,7 +36,7 @@ The assembler is written in a way that you can easily add more instructions of
 your own type.
 
 To add a `bne` instruction you could first modify the
-[`BITS_OPCODE`](https://github.com/AntonPieper/digitech-assembler/blob/master/assembler.c#L14)
+[`BITS_OPCODE`](https://github.com/AntonPieper/digitech-assembler/blob/main/assembler.c#L14)
 to add room for the instruction.
 
 Then you can modify the [`INSTRUCTIONS`](https://github.com/AntonPieper/digitech-assembler/blob/main/assembler.c#L37-L39)-Array
