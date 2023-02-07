@@ -10,17 +10,15 @@
 
 // General Config
 #define NUM_REGISTERS 4
-#define BITS_INSTRUCTION 9
 #define BITS_OPCODE 3
-// R- & I-Instruction Config
-#define BITS_DES 2
-// R-Instruction Config
-#define BITS_SRC1 2
-#define BITS_SRC2 2
-// I-Instruction Config
-#define BITS_DATA 4
-// J-Instruction Config
-#define BITS_PROG_ADDR 6
+#define BITS_REGISTER 2
+
+// I-Instruction specific
+#define BITS_DATA (2 * BITS_REGISTER)
+// J-Instruction specific
+#define BITS_PROG_ADDR (3 * BITS_REGISTER)
+// Instruction size
+#define BITS_INSTRUCTION (BITS_OPCODE + BITS_PROG_ADDR)
 
 // Error Codes
 #define ERROR_USAGE 1
@@ -86,7 +84,8 @@ int main(int argc, char **argv) {
       token = strtok(NULL, delim);
     }
     int instruction = read_instruction(token_count, tokens);
-    if (instruction == -1) continue; // Comment
+    if (instruction == -1)
+      continue; // Comment
     char str[4];
     fprintf(output, "0x%s\n", instruction_to_string(instruction, 4, str));
   }
@@ -126,7 +125,7 @@ int read_instruction(int token_count, char *tokens[token_count]) {
     }
   }
   if (tokens[0][0] == '#') {
-      return -1;
+    return -1;
   }
   fprintf(stderr, "Invalid instruction: got %s\n", tokens[0]);
   exit(ERROR_INSTRUCTION);
@@ -175,12 +174,12 @@ int instruction_r(const Instruction *instruction, int token_count,
   check_token_count(token_count, 4, 'R');
 
   const int mask_opcode = (1 << BITS_OPCODE) - 1;
-  const int mask_des = (1 << BITS_DES) - 1;
-  const int mask_src1 = (1 << BITS_SRC1) - 1;
-  const int mask_src2 = (1 << BITS_SRC2) - 1;
-  const int offset_src1 = BITS_SRC2;
-  const int offset_des = offset_src1 + BITS_SRC1;
-  const int offset_opcode = offset_des + BITS_DES;
+  const int mask_des = (1 << BITS_REGISTER) - 1;
+  const int mask_src1 = (1 << BITS_REGISTER) - 1;
+  const int mask_src2 = (1 << BITS_REGISTER) - 1;
+  const int offset_src1 = BITS_REGISTER;
+  const int offset_des = offset_src1 + BITS_REGISTER;
+  const int offset_opcode = offset_des + BITS_REGISTER;
 
   int opcode = instruction->opcode & mask_opcode;
   int des = read_register_token(tokens[1]) & mask_des;
@@ -196,10 +195,10 @@ int instruction_i(const Instruction *instruction, int token_count,
   check_token_count(token_count, 3, 'R');
 
   const int mask_opcode = (1 << BITS_OPCODE) - 1;
-  const int mask_des = (1 << BITS_DES) - 1;
+  const int mask_des = (1 << BITS_REGISTER) - 1;
   const int mask_data = (1 << BITS_DATA) - 1;
   const int offset_des = BITS_DATA;
-  const int offset_opcode = offset_des + BITS_DES;
+  const int offset_opcode = offset_des + BITS_REGISTER;
 
   const int min_data = -(1 << (BITS_DATA - 1));
   // Could also be an unsigned number
@@ -222,7 +221,7 @@ int instruction_j(const Instruction *instruction, int token_count,
   check_token_count(token_count, 2, 'R');
 
   const int mask_opcode = (1 << BITS_OPCODE) - 1;
-  const int mask_des = (1 << BITS_DES) - 1;
+  const int mask_des = (1 << BITS_REGISTER) - 1;
   const int mask_prog_addr = (1 << BITS_PROG_ADDR) - 1;
   const int offset_opcode = BITS_PROG_ADDR;
 
