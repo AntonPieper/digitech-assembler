@@ -1,4 +1,4 @@
-# Fibonacci
+# Example Program
 ldi r0, 1
 ldi r1, 1
 ldi r2, 1
