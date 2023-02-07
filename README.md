@@ -23,18 +23,19 @@ Run the compiled program with the path to the assembly file as it's first
 argument. You can optionally pass a filename for an output file.
 If you don't pass an output file, the program just writes to the terminal's output.
 
-Example usage:
+**Example usage:**
 
 printing to terminal output
 
-    ```sh
-    ./assembler example.asm
-    ```
+```sh
+./assembler example.asm
+```
+
 writing to a new `example.o` file
 
-    ```
-    ./assembler example.asm example.o
-
+```sh
+./assembler example.asm example.o
+```
 
 ## How it works
 
