@@ -35,8 +35,9 @@ finally merges the arguments and the opcode into one instruction.
 The assembler is written in a way that you can easily add more instructions of
 your own type.
 
+### Modifying instruction size and adding an instruction
 To add a `bne` instruction you could first modify the
-[`BITS_OPCODE`](https://github.com/AntonPieper/digitech-assembler/blob/master/assembler.c#L14)
+[`BITS_OPCODE`](https://github.com/AntonPieper/digitech-assembler/blob/main/assembler.c#L14)
 to add room for the instruction.
 
 Then you can modify the [`INSTRUCTIONS`](https://github.com/AntonPieper/digitech-assembler/blob/main/assembler.c#L37-L39)-Array
@@ -54,4 +55,15 @@ const Instruction INSTRUCTIONS[] = {
     {"jmp", 'j', 0x7},
     {"bne", "i", 0x8}
 };
+```
+
+### Modifying the output
+
+In [line 91](https://github.com/AntonPieper/digitech-assembler/blob/main/assembler.c#L91),
+the instruction gets printed. Here you can modify the format to fit your needs.
+
+You can for example print all instructions as decimal, separated by a space:
+
+```c
+fprintf(output, "%d ", instruction);
 ```
